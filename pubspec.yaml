@@ -1,0 +1,23 @@
+name: s_toggle
+description: A customizable animated toggle widget for Flutter applications.
+issue_tracker: https://github.com/SoundSliced/s_toggle/issues
+repository: https://github.com/SoundSliced/s_toggle
+version: 0.0.1
+homepage: https://github.com/SoundSliced/s_toggle
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  soundsliced_tween_animation_builder: ^1.1.0
+  soundsliced_dart_extensions: ^1.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
