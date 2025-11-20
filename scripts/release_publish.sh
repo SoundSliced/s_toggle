@@ -230,7 +230,8 @@ update_github_username() {
             sed -i '' "s|^homepage:.*|homepage: https://github.com/$username/$PACKAGE_NAME|" pubspec.yaml
         fi
     else
-        sed -i '' "/^description:/a homepage: https://github.com/$username/$PACKAGE_NAME" pubspec.yaml
+        sed -i '' "/^description:/a\\
+homepage: https://github.com/$username/$PACKAGE_NAME" pubspec.yaml
     fi
     
     if grep -q "^repository:" pubspec.yaml; then
@@ -240,7 +241,8 @@ update_github_username() {
             sed -i '' "s|^repository:.*|repository: https://github.com/$username/$PACKAGE_NAME|" pubspec.yaml
         fi
     else
-        sed -i '' "/^description:/a repository: https://github.com/$username/$PACKAGE_NAME" pubspec.yaml
+        sed -i '' "/^description:/a\\
+repository: https://github.com/$username/$PACKAGE_NAME" pubspec.yaml
     fi
     
     if grep -q "^issue_tracker:" pubspec.yaml; then
@@ -250,7 +252,8 @@ update_github_username() {
             sed -i '' "s|^issue_tracker:.*|issue_tracker: https://github.com/$username/$PACKAGE_NAME/issues|" pubspec.yaml
         fi
     else
-        sed -i '' "/^description:/a issue_tracker: https://github.com/$username/$PACKAGE_NAME/issues" pubspec.yaml
+        sed -i '' "/^description:/a\\
+issue_tracker: https://github.com/$username/$PACKAGE_NAME/issues" pubspec.yaml
     fi
     
     # Update README.md
@@ -653,17 +656,20 @@ publish_to_pubdev() {
     # Verify URLs are present (should have been added by update_github_username)
     if ! grep -q "^homepage:" pubspec.yaml; then
         print_warning "Homepage not found, adding it now..."
-        sed -i '' "/^description:/a homepage: $homepage" pubspec.yaml
+        sed -i '' "/^description:/a\\
+homepage: $homepage" pubspec.yaml
     fi
 
     if ! grep -q "^repository:" pubspec.yaml; then
         print_warning "Repository not found, adding it now..."
-        sed -i '' "/^description:/a repository: $repository" pubspec.yaml
+        sed -i '' "/^description:/a\\
+repository: $repository" pubspec.yaml
     fi
 
     if ! grep -q "^issue_tracker:" pubspec.yaml; then
         print_warning "Issue tracker not found, adding it now..."
-        sed -i '' "/^description:/a issue_tracker: $issues" pubspec.yaml
+        sed -i '' "/^description:/a\\
+issue_tracker: $issues" pubspec.yaml
     fi
 
     # Final dry-run

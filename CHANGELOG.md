@@ -1,3 +1,7 @@
+## 1.0.1
+
+* Version 1.0.1
+
 ## 1.0.0
 
 * Stable release of s_toggle package
