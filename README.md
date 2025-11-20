@@ -1,6 +1,6 @@
 # s_toggle
 
-A Flutter package providing a customizable animated toggle widget.
+A Flutter package providing a customizable animated toggle widget with smooth elastic animations and bounce effects.
 
 ## Installation
 
@@ -8,7 +8,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  s_toggle: ^1.0.0
+  s_toggle: ^1.0.1
 ```
 
 Or for the latest version:
@@ -30,34 +30,48 @@ import 'package:s_toggle/s_toggle.dart';
 ### Basic Example
 
 ```dart
-class MyWidget extends StatefulWidget {
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
   @override
-  _MyWidgetState createState() => _MyWidgetState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyWidgetState extends State<MyWidget> {
-  bool _isToggled = false;
+class _MyHomePageState extends State<MyHomePage> {
+  bool _toggleValue = false;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SToggle(
-            size: 80.0,
-            onColor: Colors.green,
-            offColor: Colors.red,
-            value: _isToggled,
-            onChange: (value) {
-              setState(() {
-                _isToggled = value;
-              });
-            },
-          ),
-          SizedBox(height: 20),
-          Text('Toggle is ${_isToggled ? 'ON' : 'OFF'}'),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('s_toggle Example'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'Toggle the switch:',
+            ),
+            const SizedBox(height: 20),
+            SToggle(
+              size: 80.0,
+              onColor: Colors.green,
+              offColor: Colors.red,
+              value: _toggleValue,
+              onChange: (value) {
+                setState(() {
+                  _toggleValue = value;
+                });
+              },
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Toggle is ${_toggleValue ? 'ON' : 'OFF'}',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -103,7 +117,26 @@ SToggle(
 
 ## Example
 
-See the `example/` directory for a complete Flutter app demonstrating the usage of the s_toggle package.
+The `example/` directory contains a complete Flutter application demonstrating the s_toggle package. The example app features:
+
+- A clean Material Design interface with an AppBar
+- A centered toggle switch with custom colors (green for ON, red for OFF)
+- Real-time state display showing whether the toggle is ON or OFF
+- Demonstrates proper state management with setState
+- Shows how to use the onChange callback effectively
+
+To run the example:
+
+```bash
+cd example
+flutter run
+```
+
+The example demonstrates best practices for integrating s_toggle into your Flutter applications, including:
+- Proper widget composition
+- State management patterns
+- Callback handling
+- UI/UX considerations
 
 ## License
 

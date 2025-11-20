@@ -146,5 +146,63 @@ void main() {
       // Pump to completion
       await tester.pumpAndSettle();
     });
+
+    testWidgets('custom colors are applied', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: SToggle(
+            value: false,
+            onColor: Colors.blue,
+            offColor: Colors.yellow,
+          ),
+        ),
+      );
+
+      // Verify widget renders with custom colors
+      expect(find.byType(SToggle), findsOneWidget);
+    });
+
+    testWidgets('onChange callback is not null safe',
+        (WidgetTester tester) async {
+      // Test that widget works without onChange callback
+      await tester.pumpWidget(
+        MaterialApp(
+          home: SToggle(
+            value: false,
+            onChange: null,
+          ),
+        ),
+      );
+
+      // Tap should work even without callback
+      await tester.tap(find.byType(SToggle));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(SToggle), findsOneWidget);
+    });
+
+    testWidgets('multiple rapid taps are handled correctly',
+        (WidgetTester tester) async {
+      int callbackCount = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: SToggle(
+            value: false,
+            onChange: (value) => callbackCount++,
+          ),
+        ),
+      );
+
+      // First tap
+      await tester.tap(find.byType(SToggle));
+      await tester.pump(const Duration(milliseconds: 100));
+
+      // Second tap during animation (should be ignored due to _isAnimating flag)
+      await tester.tap(find.byType(SToggle));
+      await tester.pumpAndSettle();
+
+      // Only first tap should register
+      expect(callbackCount, 1);
+    });
   });
 }

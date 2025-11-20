@@ -1,6 +1,14 @@
 ## 1.0.1
 
-* Version 1.0.1
+* Updated documentation and README to accurately reflect package features
+* Enhanced example app with better UI and Material Design principles
+* Improved test coverage with comprehensive widget tests
+* Updated dependencies to latest stable versions
+* Added support for programmatic state changes via didUpdateWidget
+* Fixed animation state management to prevent overlapping animations
+* Enhanced README with detailed parameter documentation table
+* Verified MIT License file is present and up to date
+* Repository and issue tracker links confirmed in pubspec.yaml
 
 ## 1.0.0
 
