@@ -83,6 +83,62 @@ ensure_gitattributes() {
     print_success ".gitattributes updated for GitHub Linguist language detection."
 }
 
+# Function to create or update .pubignore to exclude scripts from published package
+ensure_pubignore() {
+    local repo_root="$PWD"
+    local file="$repo_root/.pubignore"
+    
+    # Create .pubignore if it doesn't exist
+    if [[ ! -f "$file" ]]; then
+        cat > "$file" <<'EOF'
+# Exclude scripts directory from published package
+scripts/
+*.sh
+EOF
+        print_info "Created .pubignore to exclude scripts from published package"
+    else
+        # Add scripts/ if not present
+        if ! grep -q '^scripts/' "$file"; then
+            echo "scripts/" >> "$file"
+            print_info "Added 'scripts/' to .pubignore"
+        fi
+        # Add *.sh if not present
+        if ! grep -q '^\\.sh' "$file" && ! grep -q '^\\*\\.sh' "$file"; then
+            echo "*.sh" >> "$file"
+            print_info "Added '*.sh' to .pubignore"
+        fi
+    fi
+}
+
+# Function to commit pending changes before verification
+commit_changes() {
+    # Check if there are any changes to commit
+    if ! git diff --quiet || ! git diff --cached --quiet || [[ -n "$(git ls-files --others --exclude-standard)" ]]; then
+        print_info "Committing changes before verification..."
+        
+        # Add all modified and new files
+        git add -A
+        
+        # Create commit message
+        local commit_msg="Update package to version $VERSION
+
+- Updated version to $VERSION
+- Updated documentation (CHANGELOG.md, README.md)
+- Organized shell scripts into scripts/ directory
+- Added .gitattributes for GitHub Linguist
+- Added .pubignore to exclude scripts from published package"
+        
+        git commit -m "$commit_msg" || {
+            print_warning "Git commit failed or nothing to commit"
+            return 1
+        }
+        
+        print_success "Changes committed successfully"
+    else
+        print_info "No changes to commit, working directory is clean"
+    fi
+}
+
 # Function to prompt user for confirmation
 confirm() {
     local message="$1"
@@ -387,10 +443,10 @@ run_verification() {
     if confirm "Use Copilot AI to review and update CHANGELOG.md, README.md, and other documentation to reflect the current version ($VERSION) and package functionality?"; then
         print_info "Please use Copilot AI in VS Code to update the documentation files."
         print_info "Ask Copilot to:"
-        print_info "  - Ensure to create or update as necessary example folder and tests"
+        print_info "  - Ensure to create or update as necessary example folder and tests, with the updates made to the package (if any relevant)"
         print_info "  - Ensure to create or update an MIT license file if missing"
         print_info "  - Ensure CHANGELOG.md includes the current version $VERSION and describes changes"
-        print_info "  - Update README.md to accurately describe the package, its features, and include example usage"
+        print_info "  - Update README.md to accurately describe the package, its features, and include example usage, with the updates made to the package (if any relevant)"
         print_info "  - Verify all MD files are up to date with the latest package information"
         print_info "  - Ensure README.md reflects the examples in the example/ directory"
         if confirm "Press enter when documentation is updated"; then
@@ -660,9 +716,10 @@ main() {
     # Get package info
     get_package_info
 
-    # Pre-step: organize shell scripts & ensure .gitattributes configuration
+    # Pre-step: organize shell scripts & ensure .gitattributes and .pubignore configuration
     organize_shell_scripts
     ensure_gitattributes
+    ensure_pubignore
 
     # Step 1: Package renaming
     rename_package
@@ -715,6 +772,9 @@ main() {
     echo "  Version: $VERSION"
     echo "  GitHub: $USERNAME/$PACKAGE_NAME"
     echo ""
+
+    # Commit changes before verification
+    commit_changes
 
     # Verification
     if confirm "Run verification checklist (analyze, test, dry-run)?" y; then
