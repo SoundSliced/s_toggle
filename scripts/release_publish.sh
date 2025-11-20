@@ -29,6 +29,60 @@ print_error() {
     echo -e "${RED}ERROR:${NC} $1"
 }
 
+# Function to organize root-level shell scripts into scripts/ directory
+organize_shell_scripts() {
+    print_info "Organizing shell scripts in repository root..."
+    local repo_root="$PWD"
+    # Ensure we're at package root (pubspec.yaml should exist here)
+    if [[ ! -f "$repo_root/pubspec.yaml" ]]; then
+        print_warning "Current directory does not contain pubspec.yaml; skipping shell script organization."
+        return
+    fi
+    mkdir -p "$repo_root/scripts"
+    local moved_any=false
+    # Iterate over root-level .sh files (exclude glob if none)
+    for f in "$repo_root"/*.sh; do
+        if [[ ! -e "$f" ]]; then
+            continue
+        fi
+        local base_name="$(basename "$f")"
+        # Skip if already inside scripts or if file is this release script (which resides in scripts/)
+        if [[ "$f" == "$repo_root/scripts/release_publish.sh" ]]; then
+            continue
+        fi
+        # Move file
+        mv "$f" "$repo_root/scripts/" 2>/dev/null || {
+            print_warning "Could not move $base_name"
+            continue
+        }
+        print_info "Moved $base_name to scripts/"
+        moved_any=true
+    done
+    if [[ "$moved_any" == true ]]; then
+        print_success "Shell scripts consolidated into scripts/ directory."
+    else
+        print_info "No root-level shell scripts needed moving."
+    fi
+}
+
+# Function to ensure .gitattributes excludes shell scripts from language stats
+ensure_gitattributes() {
+    local repo_root="$PWD"
+    local file="$repo_root/.gitattributes"
+    touch "$file"
+    # Add linguist-vendored for all .sh scripts if not present
+    if ! grep -qE '^\*\.sh[[:space:]]+linguist-vendored' "$file"; then
+        echo "*.sh linguist-vendored" >> "$file"
+        print_info "Added '*.sh linguist-vendored' to .gitattributes"
+    fi
+    # Add build/* linguist-generated to hide build artifacts
+    if ! grep -qE '^build/\*[[:space:]]+linguist-generated' "$file"; then
+        echo "build/* linguist-generated" >> "$file"
+        print_info "Added 'build/* linguist-generated' to .gitattributes"
+    fi
+    print_success ".gitattributes updated for GitHub Linguist language detection."
+}
+
 # Function to prompt user for confirmation
 confirm() {
     local message="$1"
@@ -605,6 +659,10 @@ main() {
 
     # Get package info
     get_package_info
+
+    # Pre-step: organize shell scripts & ensure .gitattributes configuration
+    organize_shell_scripts
+    ensure_gitattributes
 
     # Step 1: Package renaming
     rename_package

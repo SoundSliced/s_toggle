@@ -1,0 +1,5 @@
+# GitHub Linguist adjustments
+# Treat all shell scripts as vendored so Dart dominates language stats
+*.sh linguist-vendored
+# Treat build outputs as generated code
+build/* linguist-generated
