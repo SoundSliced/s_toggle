@@ -1,3 +1,7 @@
+## 1.0.2
+
+* updated dependancies
+
 ## 1.0.1
 
 * Updated documentation and README to accurately reflect package features

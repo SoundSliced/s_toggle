@@ -8,7 +8,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  s_toggle: ^1.0.1
+  s_toggle: ^1.0.2
 ```
 
 Or for the latest version:

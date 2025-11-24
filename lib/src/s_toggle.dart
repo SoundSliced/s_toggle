@@ -99,7 +99,7 @@ class SToggleState extends State<SToggle> {
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10000.0))),
-        child: MyTweenAnimationBuilder<double>(
+        child: STweenAnimationBuilder<double>(
           key: ValueKey(_animationKey),
           tween: Tween<double>(begin: 0.0, end: 1.0),
           duration:
