@@ -1,3 +1,8 @@
+## 2.0.1
+
+* README updated: now showing GIF example 
+* updated dependencies
+
 ## 2.0.0
 
 This release modernizes the package for the latest Flutter/Dart toolchain and polishes documentation.
