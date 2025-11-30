@@ -7,7 +7,7 @@ A Flutter package providing a customizable animated toggle widget with smooth el
 
 The example app demonstrates both basic and advanced usage of `s_toggle`.
 
-![Basic usage](https://github.com/SoundSliced/s_toggle/blob/main/example/assets/example.gif)
+![Basic usage](https://raw.githubusercontent.com/SoundSliced/s_toggle/main/example/assets/example.gif)
 
 If you have more screenshots or recordings under `example/assets/`, you can add them similarly using their GitHub paths.
 
