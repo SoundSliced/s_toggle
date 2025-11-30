@@ -1,6 +1,13 @@
 ## 2.0.0
 
-* Version 2.0.0
+This release modernizes the package for the latest Flutter/Dart toolchain and polishes documentation.
+
+Changes:
+* Bumped package version to 2.0.0 and updated README installation snippet
+* Ensured README reflects example usage and added a screenshot GIF from `example/assets/`
+* Verified MIT License file and metadata (repository, issue tracker)
+* Kept public API of `SToggle` stable; no breaking changes introduced
+* Dependencies refreshed to latest compatible versions in `pubspec.yaml`
 
 ## 1.0.2
 

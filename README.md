@@ -2,13 +2,23 @@
 
 A Flutter package providing a customizable animated toggle widget with smooth elastic animations and bounce effects.
 
+
+### Example screenshots
+
+The example app demonstrates both basic and advanced usage of `s_toggle`.
+
+![Basic usage](https://github.com/SoundSliced/s_toggle/blob/main/example/assets/example.gif)
+
+If you have more screenshots or recordings under `example/assets/`, you can add them similarly using their GitHub paths.
+
+
 ## Installation
 
 Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  s_toggle: ^1.0.2
+  s_toggle: ^2.0.0
 ```
 
 Or for the latest version:
@@ -99,6 +109,7 @@ SToggle(
 
 - **Customizable Design**: Easily adjust size, colors, and visual appearance
 - **Smooth Animations**: Elastic bounce animation with customizable duration (default 700ms)
+- **Programmatic updates**: Responds to external state changes without user interaction
 - **State Management**: Supports both programmatic and interactive state changes
 - **Callback Support**: onChange callback for reacting to toggle state changes
 - **Efficient Rendering**: Uses CustomPaint for optimal performance
@@ -137,6 +148,7 @@ The example demonstrates best practices for integrating s_toggle into your Flutt
 - State management patterns
 - Callback handling
 - UI/UX considerations
+
 
 ## License
 

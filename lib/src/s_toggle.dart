@@ -224,7 +224,16 @@ class SToggleState extends State<SToggle> {
     // Trigger repaint during drag only when visual progress changed materially
     // This reduces rebuild churn; tolerance prevents excessive setState calls.
     setState(() {});
-    // Debug prints removed for production readiness
+    if (kDebugMode && widget.debugShowPointers) {
+      final leftX = widget._width / 4.0;
+      final rightX = widget._width * 3.0 / 4.0;
+      final progressRight = _rawDragProgress > 0 ? _rawDragProgress : 0.0;
+      final progressLeft = _rawDragProgress < 0 ? -_rawDragProgress : 0.0;
+      final t = value ? (1.0 - progressLeft) : progressRight;
+      final visualX = leftX + (rightX - leftX) * t;
+      debugPrint(
+          '[SToggle] debug dragUpdate pointerX=${_lastPointerX?.toStringAsFixed(1)} dx=${details.localPosition.dx.toStringAsFixed(1)} delta=${_dragDelta.toStringAsFixed(1)} raw=${_rawDragProgress.toStringAsFixed(3)} smoothed=${_smoothedDragProgress.toStringAsFixed(3)} t=${t.toStringAsFixed(3)} desiredSmall=${desiredSmallX.toStringAsFixed(1)} smoothedSmall=${_smoothedSmallX?.toStringAsFixed(1)} visualX=${visualX.toStringAsFixed(1)}');
+    }
   }
 
   void _onHorizontalDragEnd(DragEndDetails details) {
@@ -272,13 +281,22 @@ class SToggleState extends State<SToggle> {
         if (widget.onChange != null) widget.onChange!(_targetValue);
       }
     } else {
-      // Below threshold: revert to current state from drag position
+      // Below threshold: revert to current state from drag position.
+      // Resume the tween from the visual background mix back to the original side.
       final d = endDragProgress.abs().clamp(0.0, 1.0);
       setState(() {
         _targetValue = value; // keep current state
-        _resumeFromProgress = d;
+        // Map from current backgroundMix to tween progress start:
+        // During drag, backgroundMix = value ? (1 - d) : d.
+        // For animation builder:
+        //  - If targetValue==true (ON), backgroundMix = progress.
+        //  - If targetValue==false (OFF), backgroundMix = 1 - progress.
+        // Therefore starting progress should be (1 - d) in both cases.
+        _resumeFromProgress = (1.0 - d);
         _isResuming = true;
-        _resumeToEnd = 0.0;
+        // End progress: 1.0 returns to original side for both ON and OFF
+        // (ON: mix = 1; OFF: mix = 1 - 1 = 0)
+        _resumeToEnd = 1.0;
         _isAnimating = true;
         _animationKey++;
       });
@@ -481,7 +499,7 @@ class SToggleState extends State<SToggle> {
                   (_targetValue ? progress : (1.0 - progress)).clamp(0.0, 1.0);
             }
 
-            // Debug prints removed for production readiness
+            // Debug prints removed for production
             return CustomPaint(
               painter: _ProfileCardPainter(
                 offColor: widget.offColor,

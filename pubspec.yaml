@@ -1,5 +1,5 @@
 name: s_toggle
-description: A customizable animated toggle widget for Flutter applications.
+description: A customizable animated switch widget with smooth elastic animations, bounce effects, and flexible state management.
 issue_tracker: https://github.com/SoundSliced/s_toggle/issues
 repository: https://github.com/SoundSliced/s_toggle
 version: 2.0.0
